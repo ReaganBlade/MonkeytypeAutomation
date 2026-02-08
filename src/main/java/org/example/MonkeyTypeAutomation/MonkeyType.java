@@ -4,6 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+// Other Browser Drivers
+//import org.openqa.selenium.firefox.FirefoxDriver;
+//import org.openqa.selenium.edge.EdgeDriver;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,9 +19,24 @@ import java.time.Duration;
 
 public class MonkeyType {
 
-    public static void main(String[] args) {
+    public void run(String webDriver) throws InterruptedException {
 
-        WebDriver driver = new FirefoxDriver();
+        WebDriver driver;
+        switch (webDriver) {
+            case "chrome":
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                driver = new FirefoxDriver();
+                break;
+            case "edge":
+                driver = new EdgeDriver();
+                break;
+            default:
+                driver = new ChromeDriver();
+                break;
+        }
+
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
         driver.get("https://www.monkeytype.com/");
@@ -43,15 +65,12 @@ public class MonkeyType {
 
                 inputBox.sendKeys(wordText + " ");
 
-//                Thread.sleep(500);
-
-
                 wait.until(d -> !d.findElement(
                         By.cssSelector(".word.active")
                 ).getAttribute("data-wordindex").equals(currentIndex));
 
             } catch (TimeoutException e) {
-                break; // test finished
+                break;
             }
         }
 
